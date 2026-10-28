@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "resourcepackslib",
+	"version": "${version}",
+	"name": "ResourcepacksLib",
+	"description": "一键配置光影/材质。",
+	"authors": [
+		"WWZDGqs"
+	],
+	"license": "CC0-1.0",
+	"icon": "assets/resourcepackslib/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			{
+				"value": "ws.reslib.ResourcepacksLibClient",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-language-kotlin": "*"
+	},
+	"suggests": {
+		"iris": "*",
+		"sodium": "*"
+	}
+}
