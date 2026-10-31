@@ -33,3 +33,42 @@ Iris（可选）
 
 Sodium（可选）
 
+English
+
+ResourcepacksLib
+
+Version: 1.21.11
+
+Loader: Fabric Loader 0.20.1+ / Fabric API 0.141.6+1.21.11
+
+Features
+
+Saves resource packs, shader packs and Sodium options as named presets
+
+Config file: config/resourcepackslib/presets.json
+
+Commands
+
+/reslib save <id> save the current setup
+
+/reslib apply <id> apply a preset
+
+/reslib list list all presets
+
+/reslib delete <id> delete a preset
+
+/reslib rename <old id> <new id> rename a preset
+
+/reslib open open the management screen
+
+Dependencies
+
+Fabric Loader 0.20.1+
+
+Fabric API 0.141.6+1.21.11
+
+Fabric Language Kotlin
+
+Iris (optional)
+
+Sodium (optional)
