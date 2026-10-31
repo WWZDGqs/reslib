@@ -1,14 +1,14 @@
 {
-  "screen.resourcepackslib.title": "光影 / 材质配置记录",
+  "screen.resourcepackslib.title": "光影/材质配置记录",
   "screen.resourcepackslib.name": "记录名称",
   "screen.resourcepackslib.name_hint": "输入名称后保存当前配置",
   "screen.resourcepackslib.save_current": "保存当前",
   "screen.resourcepackslib.apply": "导入",
   "screen.resourcepackslib.delete": "删除",
-  "screen.resourcepackslib.empty": "还没有任何记录",
+  "screen.resourcepackslib.empty": "无记录",
   "screen.resourcepackslib.current": "当前光影: %s    记录数: %s",
   "screen.resourcepackslib.page": "第 %s / %s 页",
-  "screen.resourcepackslib.shader.none": "未安装 Iris",
+  "screen.resourcepackslib.shader.none": "未安装Iris",
   "screen.resourcepackslib.shader.off": "未启用",
   "message.resourcepackslib.saved": "已保存记录「%s」",
   "message.resourcepackslib.deleted": "已删除记录「%s」",
@@ -34,7 +34,7 @@
   "screen.resourcepackslib.open_video": "视频",
   "screen.resourcepackslib.options_suffix": " 项配置",
   "message.resourcepackslib.error.iris_screen": "无法打开 Iris 界面",
-  "screen.resourcepackslib.sodium_mark": " 钠",
-  "message.resourcepackslib.sodium.written": " (钠配置已写入, 重启后生效)",
-  "message.resourcepackslib.sodium.failed": " (钠配置写入失败, 详见日志)"
+  "screen.resourcepackslib.sodium_mark": "钠",
+  "message.resourcepackslib.sodium.written": "(钠配置已写入, 重启后生效)",
+  "message.resourcepackslib.sodium.failed": "(钠配置写入失败)"
 }

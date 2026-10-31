@@ -63,7 +63,7 @@ object PresetStore {
         Files.writeString(temp, gson.toJson(root))
         try {
             Files.move(temp, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Files.move(temp, file, StandardCopyOption.REPLACE_EXISTING)
         }
     }

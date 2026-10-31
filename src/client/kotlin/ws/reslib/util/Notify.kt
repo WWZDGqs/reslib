@@ -21,15 +21,6 @@ object Notify {
         }
     }
 
-    fun chat(text: Text) {
-        val player = MinecraftClient.getInstance().player
-        if (player == null) {
-            logger.info(text.string)
-        } else {
-            player.sendMessage(text, false)
-        }
-    }
-
     fun shader(result: ShaderResult): Text = when (result.status) {
         ShaderStatus.APPLIED -> Text.literal(result.pack.orEmpty())
         ShaderStatus.DISABLED -> Text.translatable("message.resourcepackslib.shader.disabled")

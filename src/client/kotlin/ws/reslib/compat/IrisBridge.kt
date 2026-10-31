@@ -27,28 +27,17 @@ object IrisBridge {
         return runCatching { method.invoke(null) as String? }.getOrNull()
     }
 
-    fun shadersEnabled(): Boolean {
-        val clazz = irisClass ?: return false
-        return runCatching {
-            val config = clazz.getMethod("getIrisConfig").invoke(null) ?: return false
-            config.javaClass.getMethod("areShadersEnabled").invoke(config) as Boolean
-        }.getOrDefault(false)
-    }
-
     fun packExists(name: String): Boolean {
         val directory = shaderpacksDirectory() ?: return true
         return Files.exists(directory.resolve(name))
     }
 
     fun readOptions(pack: String?): Map<String, String> {
-        if (pack.isNullOrEmpty()) {
+        val path = pack?.takeIf { it.isNotEmpty() }?.let(::optionsFile) ?: return emptyMap()
+        if (!Files.isRegularFile(path)) {
             return emptyMap()
         }
         return runCatching {
-            val path = optionsFile(pack) ?: return emptyMap()
-            if (!Files.isRegularFile(path)) {
-                return emptyMap()
-            }
             val properties = Properties()
             Files.newInputStream(path).use { properties.load(it) }
             properties.stringPropertyNames().associateWith { properties.getProperty(it) }
@@ -56,10 +45,7 @@ object IrisBridge {
     }
 
     fun writeOptions(pack: String?, options: Map<String, String>): Boolean {
-        if (pack.isNullOrEmpty() || options.isEmpty()) {
-            return false
-        }
-        return runCatching {
+        return !(pack.isNullOrEmpty() || options.isEmpty()) && runCatching {
             val path = optionsFile(pack) ?: return false
             Files.createDirectories(path.parent)
             val properties = Properties()
@@ -73,13 +59,8 @@ object IrisBridge {
 
     fun openShaderScreen(parent: Screen?): Boolean = runCatching {
         val api = Class.forName(IRIS_API_CLASS).getMethod("getInstance").invoke(null) ?: return false
-        val screen = api.javaClass.getMethod("openMainIrisScreenObj", Any::class.java).invoke(api, parent)
-        if (screen is Screen) {
-            MinecraftClient.getInstance().setScreen(screen)
-            true
-        } else {
-            false
-        }
+        val screen = api.javaClass.getMethod("openMainIrisScreenObj", Any::class.java).invoke(api, parent) as? Screen
+        screen?.let { MinecraftClient.getInstance().setScreen(it) } != null
     }.getOrDefault(false)
 
     fun apply(pack: String?): ShaderResult {

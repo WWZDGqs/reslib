@@ -100,9 +100,10 @@ class PresetScreen(
         val left = width / 2 - PANEL_WIDTH / 2
         context.drawCenteredTextWithShadow(textRenderer, title, width / 2, 24, 0xFFFFFF)
 
-        val shader = when {
-            !IrisBridge.available -> Text.translatable("screen.resourcepackslib.shader.none").string
-            else -> IrisBridge.currentPack() ?: Text.translatable("screen.resourcepackslib.shader.off").string
+        val shader = if (IrisBridge.available) {
+            IrisBridge.currentPack() ?: Text.translatable("screen.resourcepackslib.shader.off").string
+        } else {
+            Text.translatable("screen.resourcepackslib.shader.none").string
         }
         context.drawTextWithShadow(
             textRenderer,
@@ -173,7 +174,7 @@ class PresetScreen(
             status = text
             Notify.actionBar(text)
             rebuild()
-            nameField.setText("")
+            nameField.text = ""
         }.onFailure {
             status = Notify.error(it)
         }

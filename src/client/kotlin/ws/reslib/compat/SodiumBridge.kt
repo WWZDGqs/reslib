@@ -28,23 +28,14 @@ object SodiumBridge {
     fun configPath(): Path = FabricLoader.getInstance().configDir.resolve(CONFIG_FILE)
 
     fun readConfig(): JsonObject? = runCatching {
-        if (!available) {
-            return null
-        }
-        val path = configPath()
-        if (!Files.isRegularFile(path)) {
-            return null
-        }
-        val parsed = JsonParser.parseString(Files.readString(path))
-        if (parsed.isJsonObject) parsed.asJsonObject else null
+        JsonParser.parseString(Files.readString(configPath())) as? JsonObject
     }.getOrNull()
 
     fun writeConfig(config: JsonObject?): SodiumStatus {
         if (!available || config == null) {
             return SodiumStatus.UNAVAILABLE
         }
-        val current = readConfig()
-        if (current != null && current == config) {
+        if (readConfig() == config) {
             return SodiumStatus.UNCHANGED
         }
         return runCatching {
@@ -61,37 +52,20 @@ object SodiumBridge {
     }
 
     fun openVideoSettings(parent: Screen?): Boolean {
-        if (!available) {
-            return false
-        }
-        return openByFactory(VIDEO_SETTINGS_SCREEN, parent)
-            || openByConstructor(VIDEO_OPTIONS_SCREEN, parent)
-            || openByConstructor(LEGACY_OPTIONS_GUI, parent)
+        return available && (
+            openScreen(VIDEO_SETTINGS_SCREEN, parent)
+                || openScreen(VIDEO_OPTIONS_SCREEN, parent)
+                || openScreen(LEGACY_OPTIONS_GUI, parent)
+            )
     }
 
-    private fun openByFactory(className: String, parent: Screen?): Boolean = runCatching {
-        val clazz = Class.forName(className)
-        val screen = clazz.getMethod("createScreen", Screen::class.java).invoke(null, parent)
-        present(screen)
+    private fun openScreen(name: String, parent: Screen?): Boolean = runCatching {
+        val clazz = Class.forName(name)
+        val screen = runCatching { clazz.getMethod("createScreen", Screen::class.java).invoke(null, parent) }
+            .getOrNull() ?: clazz.getConstructor(Screen::class.java).newInstance(parent)
+        (screen as? Screen)?.also { MinecraftClient.getInstance().setScreen(it) } != null
     }.getOrElse { throwable ->
-        logger.debug("Sodium screen factory {} unavailable: {}", className, throwable.message)
+        logger.debug("Sodium screen {} unavailable: {}", name, throwable.message)
         false
-    }
-
-    private fun openByConstructor(className: String, parent: Screen?): Boolean = runCatching {
-        val clazz = Class.forName(className)
-        val screen = clazz.getConstructor(Screen::class.java).newInstance(parent)
-        present(screen)
-    }.getOrElse { throwable ->
-        logger.debug("Sodium screen {} unavailable: {}", className, throwable.message)
-        false
-    }
-
-    private fun present(screen: Any?): Boolean {
-        if (screen !is Screen) {
-            return false
-        }
-        MinecraftClient.getInstance().setScreen(screen)
-        return true
     }
 }

@@ -24,10 +24,6 @@ object PresetManager {
         data.presets.firstOrNull { it.name.equals(name, ignoreCase = true) }
     }
 
-    fun findById(id: String?): PresetRecord? = synchronized(lock) {
-        if (id == null) null else data.presets.firstOrNull { it.id == id }
-    }
-
     fun saveCurrent(rawName: String): Result<PresetRecord> = synchronized(lock) {
         val name = rawName.trim()
         if (name.isEmpty()) {
@@ -106,10 +102,6 @@ object PresetManager {
     fun delete(name: String): Boolean {
         val record = find(name) ?: return false
         return deleteById(record.id)
-    }
-
-    fun reload() = synchronized(lock) {
-        data = PresetStore.load()
     }
 
     private fun persist() {

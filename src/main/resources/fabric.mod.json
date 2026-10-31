@@ -3,7 +3,7 @@
 	"id": "resourcepackslib",
 	"version": "${version}",
 	"name": "ResourcepacksLib",
-	"description": "一键配置光影/材质。",
+	"description": "光影/材质配置保存。",
 	"authors": [
 		"WWZDGqs"
 	],
